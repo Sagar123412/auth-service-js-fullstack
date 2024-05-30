@@ -1,5 +1,5 @@
 function login(username: string): string {
-  return '';
+  return username;
 }
 
 login('Sagar');
