@@ -7,7 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node src/server.js",
     "formate:check": "prettier . --check",
-    "formate:write": "prettier . --write"
+    "formate:write": "prettier . --write",
+    "prepare": "husky",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "author": "Sagar",
   "license": "ISC",
@@ -17,6 +20,7 @@
     "@typescript-eslint/parser": "^7.11.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.0.11",
     "prettier": "3.2.5",
     "typescript": "^5.4.5"
   }
