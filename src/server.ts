@@ -1,9 +1,15 @@
 import { Config } from './config';
+import app from './app';
 
-function login(username: string): string {
-  return username;
+function startServer() {
+  try {
+    app.listen(Config.PORT, () => {
+      console.log(`server is running on port ${Config.PORT}`);
+    });
+  } catch (err) {
+    console.log(err);
+    process.exit(1);
+  }
 }
 
-login('Sagar');
-
-console.log(Config.PORT);
+startServer();
