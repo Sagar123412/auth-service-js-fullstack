@@ -11,13 +11,14 @@
     "prepare": "husky",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "jest --watch"
+    "test": "jest --watch --runInBand"
   },
   "author": "Sagar",
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@types/node": "^20.12.12",
+    "@types/supertest": "^6.0.2",
     "@types/winston": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^7.11.0",
     "@typescript-eslint/parser": "^7.11.0",
@@ -28,6 +29,7 @@
     "lint-staged": "^15.2.5",
     "nodemon": "^3.1.2",
     "prettier": "3.2.5",
+    "supertest": "7.0.0",
     "ts-jest": "^29.1.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"

@@ -5,7 +5,7 @@ import logger from './config/logger';
 const app = express();
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('home route');
+  res.status(200).send('home route');
 });
 
 //global error handler middleware
