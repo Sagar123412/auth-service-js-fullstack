@@ -20,5 +20,7 @@ describe('POST auth/register', () => {
       //Assert
       expect(result.statusCode).toBe(201);
     });
+
+    it('should user persist', () => {});
   });
 });
