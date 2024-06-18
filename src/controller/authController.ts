@@ -1,17 +1,21 @@
-import { Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { userRequestType } from '../types';
 import { UserService } from '../services/UserService';
-import { AppDataSource } from '../config/data-source';
-import { User } from '../entity/User';
+import { Logger } from 'winston';
 
 export class AuthController {
-  async register(req: userRequestType, res: Response) {
+  constructor(
+    private logger: Logger,
+    private userService: UserService,
+  ) {}
+
+  async register(req: userRequestType, res: Response, next: NextFunction) {
     const { firstName, lastName, email, password } = req.body;
-
-    const userRespository = AppDataSource.getRepository(User);
-    const userService = new UserService(userRespository);
-    await userService.create({ firstName, lastName, email, password });
-
-    res.status(201).send('user created');
+    try {
+      await this.userService.create({ firstName, lastName, email, password });
+      res.status(201).send('user created');
+    } catch (err) {
+      next(err);
+    }
   }
 }
