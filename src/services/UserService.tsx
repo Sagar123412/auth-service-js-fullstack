@@ -14,8 +14,11 @@ export class UserService {
     try {
       await this.userRepository.save({ firstName, lastName, email, password });
     } catch (error) {
-      const err = createHttpError(500, 'failed to register/store user in the database')
-      throw err
+      const err = createHttpError(
+        500,
+        'failed to register/store user in the database',
+      );
+      throw err;
     }
   }
 }
