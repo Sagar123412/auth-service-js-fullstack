@@ -7,10 +7,14 @@ import { AppDataSource } from '../config/data-source';
 const router = express.Router();
 
 //authController instance
-const userRespository = AppDataSource.getRepository(User);
-const userService = new UserService(userRespository);
-const auth = new AuthController(logger, userService);
+const userRepository = AppDataSource.getRepository(User);
+const userService = new UserService(userRepository);
 
-router.post('/resigter', auth.register);
+// Instantiate AuthController with logger and userService
+const authController = new AuthController(userService, logger);
+
+router.post('/resigter', async (req, res, next) => {
+  await authController.register(req, res, next);
+});
 
 export default router;
