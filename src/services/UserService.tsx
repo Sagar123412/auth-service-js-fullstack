@@ -13,7 +13,13 @@ export class UserService {
 
   async create({ firstName, lastName, email, password }: UserData) {
     try {
-      await this.userRepository.save({ firstName, lastName, email, password, role:roles.CUSTOMER });
+      await this.userRepository.save({
+        firstName,
+        lastName,
+        email,
+        password,
+        role: roles.CUSTOMER,
+      });
     } catch (error) {
       const err = createHttpError(
         500,
