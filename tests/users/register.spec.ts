@@ -14,7 +14,8 @@ describe('POST auth/register', () => {
 
   beforeEach(async () => {
     //truncate database
-    await truncateTable(connection);
+    await connection.dropDatabase();
+    await connection.synchronize();
   });
 
   afterAll(async () => {
@@ -58,6 +59,26 @@ describe('POST auth/register', () => {
       const userRepository = await connection.getRepository(User);
       const userlist = await userRepository.find();
       expect(userlist).toHaveLength(1);
+    });
+
+    it('user should a have a customer role', async () => {
+      //Arrange
+      const userData = {
+        firstName: '',
+        lastName: '',
+        email: 'test@gmail.com',
+        password: 'secret',
+      };
+
+      //Act
+      await request(app).post('/auth/resigter').send(userData);
+
+      //Assert
+      const userRepository = await connection.getRepository(User);
+      const user = await userRepository.find();
+
+      expect(user[0]).toHaveProperty('role');
+      expect(user[0].role).toBe('customer');
     });
   });
 });
