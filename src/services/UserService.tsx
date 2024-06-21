@@ -3,7 +3,7 @@ import { User } from '../entity/User';
 import { UserData } from '../types';
 import createHttpError from 'http-errors';
 import { roles } from '../constants';
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
 
 export class UserService {
   userRepository: Repository<User>;
@@ -13,7 +13,6 @@ export class UserService {
   }
 
   async create({ firstName, lastName, email, password }: UserData) {
-
     const saltRound = 10;
     const hanshedPassword = await bcrypt.hash(password, saltRound);
 
