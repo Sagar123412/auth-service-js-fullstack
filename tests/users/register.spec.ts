@@ -102,7 +102,7 @@ describe('POST auth/register', () => {
       expect(user[0].password).toMatch(/^\$2[a|b]\$\d+\$/);
     });
 
-    it('should store hashed password in the database', async () => {
+    it('email should be unique while registeration of user', async () => {
       //Arrange
       const userData = {
         firstName: 'Sagar',
@@ -120,6 +120,30 @@ describe('POST auth/register', () => {
       //Assert
       const user = await userRepository.find();
       expect(user).toHaveLength(1);
+    });
+  });
+
+  describe('sad path - fields are missing', () => {
+    it('email should be validate for empty and valid email', async () => {
+      //Arrange
+      const userData = {
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+      };
+
+      //Act
+      const response = await request(app).post('/auth/resigter').send(userData);
+
+      //Assert
+
+      expect(response.statusCode).toBe(400);
+
+      //also check if email is not valid the no record should be created in the database
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users).toHaveLength(0);
     });
   });
 });
