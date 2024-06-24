@@ -28,10 +28,10 @@ describe('POST auth/register', () => {
 
       //Arrange
       const userData = {
-        firstName: '',
-        lastName: '',
+        firstName: 'Sagar',
+        lastName: 'Sain',
         email: 'test@gmail.com',
-        password: 'secret',
+        password: 'Ss@12345',
       };
 
       //Act
@@ -46,10 +46,10 @@ describe('POST auth/register', () => {
 
       //Arrange
       const userData = {
-        firstName: '',
-        lastName: '',
+        firstName: 'Sagar',
+        lastName: 'Sain',
         email: 'test@gmail.com',
-        password: 'secret',
+        password: 'Ss@12345',
       };
 
       //Act
@@ -64,10 +64,10 @@ describe('POST auth/register', () => {
     it('user should a have a customer role', async () => {
       //Arrange
       const userData = {
-        firstName: '',
-        lastName: '',
+        firstName: 'Sagar',
+        lastName: 'Sain',
         email: 'test@gmail.com',
-        password: 'secret',
+        password: 'Ss@12345',
       };
 
       //Act
@@ -87,7 +87,7 @@ describe('POST auth/register', () => {
         firstName: 'Sagar',
         lastName: 'Sain',
         email: 'test@gmail.com',
-        password: 'secret',
+        password: 'Ss@12345',
       };
 
       //Act
@@ -151,10 +151,10 @@ describe('POST auth/register', () => {
     it('email should be trim', async () => {
       //Arrange
       const userData = {
-        firstName: '',
-        lastName: '',
+        firstName: 'sagar',
+        lastName: 'sain',
         email: ' example@gmail.com ',
-        password: '',
+        password: 'Ss@2345678',
       };
 
       //Act
@@ -167,6 +167,88 @@ describe('POST auth/register', () => {
       const users = await userRepository.find();
       const user = users[0];
       expect(user.email).toBe('example@gmail.com');
+    });
+    it('first name should not be empty', async () => {
+      //Arrange
+      const userData = {
+        firstName: '',
+        lastName: 'sain',
+        email: ' example@gmail.com ',
+        password: 'Ss@2345678',
+      };
+
+      //Act
+      const response = await request(app).post('/auth/resigter').send(userData);
+
+      expect(response.statusCode).toBe(400);
+      //Assert
+
+      //also check if email is not valid the no record should be created in the database
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users).toHaveLength(0);
+    });
+
+    it('last name should not be empty', async () => {
+      //Arrange
+      const userData = {
+        firstName: 'Sagar',
+        lastName: '',
+        email: ' example@gmail.com ',
+        password: 'Ss@2345678',
+      };
+
+      //Act
+      const response = await request(app).post('/auth/resigter').send(userData);
+
+      expect(response.statusCode).toBe(400);
+      //Assert
+
+      //also check if email is not valid the no record should be created in the database
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users).toHaveLength(0);
+    });
+
+    it('password should not be empty', async () => {
+      //Arrange
+      const userData = {
+        firstName: 'Sagar',
+        lastName: 'sain',
+        email: ' example@gmail.com ',
+        password: '',
+      };
+
+      //Act
+      const response = await request(app).post('/auth/resigter').send(userData);
+
+      expect(response.statusCode).toBe(400);
+      //Assert
+
+      //also check if email is not valid the no record should be created in the database
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users).toHaveLength(0);
+    });
+    it('password should not be in correct format', async () => {
+      //Arrange
+      const userData = {
+        firstName: 'Sagar',
+        lastName: 'sain',
+        email: ' example@gmail.com ',
+        password: 'sdfjlsfk',
+      };
+
+      //Act
+      const response = await request(app).post('/auth/resigter').send(userData);
+
+      expect(response.statusCode).toBe(400);
+      //Assert
+
+      //also check if email is not valid the no record should be created in the database
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users).toHaveLength(0);
     });
   });
 });
