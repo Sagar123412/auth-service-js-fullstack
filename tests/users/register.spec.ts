@@ -146,4 +146,27 @@ describe('POST auth/register', () => {
       expect(users).toHaveLength(0);
     });
   });
+
+  describe('input should be in the correct formate', () => {
+    it('email should be trim', async () => {
+      //Arrange
+      const userData = {
+        firstName: '',
+        lastName: '',
+        email: ' example@gmail.com ',
+        password: '',
+      };
+
+      //Act
+      const response = await request(app).post('/auth/resigter').send(userData);
+
+      //Assert
+
+      //also check if email is not valid the no record should be created in the database
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      const user = users[0];
+      expect(user.email).toBe('example@gmail.com');
+    });
+  });
 });
