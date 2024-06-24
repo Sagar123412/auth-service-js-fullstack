@@ -3,6 +3,11 @@ import { userRequestType } from '../types';
 import { UserService } from '../services/UserService';
 import { Logger } from 'winston';
 import { validationResult } from 'express-validator';
+import { JwtPayload, sign } from 'jsonwebtoken';
+import createHttpError from 'http-errors';
+import path from 'path';
+import fs from 'fs';
+import { Config } from '../config';
 
 export class AuthController {
   userService: UserService;
@@ -31,8 +36,63 @@ export class AuthController {
     });
 
     try {
-      await this.userService.create({ firstName, lastName, email, password });
-      this.logger.info('User created successfully');
+      const user = await this.userService.create({
+        firstName,
+        lastName,
+        email,
+        password,
+      });
+      this.logger.info('User created successfully', user.id);
+
+      //generated access token using JWT RS256 encoding method
+
+      //jwt payload
+      const payload: JwtPayload = {
+        sub: String(user.id),
+        role: user.role,
+      };
+
+      //private key for RS256
+      let privateKey: Buffer;
+      try {
+        privateKey = fs.readFileSync(
+          path.join(__dirname, '../../certs/private.pem'),
+        );
+      } catch (err) {
+        const error = createHttpError(500, 'Error while reading private key');
+        next(error);
+        return;
+      }
+
+      const accessToken = sign(payload, privateKey, {
+        algorithm: 'RS256',
+        expiresIn: '1h',
+        issuer: 'auth-service',
+      });
+
+      //Refresh token generation using HS256
+
+      const refreshToken = sign(payload, Config.REFRESH_TOKEN_SECRET!, {
+        algorithm: 'HS256',
+        expiresIn: '1y',
+        issuer: 'auth-service',
+      });
+
+      //access token and refresh token
+      res.cookie('accessToken', accessToken, {
+        domain: 'localhost',
+        sameSite: 'strict',
+        maxAge: 1000 * 60 * 60 * 24 * 1, // 1d
+        httpOnly: true, // Very important
+      });
+
+      res.cookie('refreshToken', refreshToken, {
+        domain: 'localhost',
+        sameSite: 'strict',
+        maxAge: 1000 * 60 * 60 * 24 * 365, // 1y
+        httpOnly: true, // Very important
+      });
+
       res.status(201).send('User created');
     } catch (error) {
       this.logger.error('Error creating user', error);

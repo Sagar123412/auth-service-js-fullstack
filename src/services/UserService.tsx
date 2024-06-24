@@ -26,7 +26,7 @@ export class UserService {
     const hanshedPassword = await bcrypt.hash(password, saltRound);
 
     try {
-      await this.userRepository.save({
+      return await this.userRepository.save({
         firstName,
         lastName,
         email,
