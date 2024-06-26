@@ -6,12 +6,15 @@ import { User } from '../entity/User';
 import { AppDataSource } from '../config/data-source';
 import registerValidators from '../validators/register-validators';
 import { TokenService } from '../services/TokenService';
+import { RefreshToken } from '../entity/RefreshToken';
 const router = express.Router();
 
 //authController instance
 const userRepository = AppDataSource.getRepository(User);
 const userService = new UserService(userRepository);
-const tokenService = new TokenService();
+
+const refreshTokenRepository = AppDataSource.getRepository(RefreshToken);
+const tokenService = new TokenService(refreshTokenRepository);
 
 // Instantiate AuthController with logger and userService
 const authController = new AuthController(userService, logger, tokenService);
