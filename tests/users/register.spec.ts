@@ -4,6 +4,7 @@ import { DataSource } from 'typeorm';
 import { AppDataSource } from '../../src/config/data-source';
 import { User } from '../../src/entity/User';
 import { isJwt, truncateTable } from '../utils';
+import { RefreshToken } from '../../src/entity/RefreshToken';
 
 describe('POST auth/register', () => {
   let connection: DataSource;
@@ -184,31 +185,30 @@ describe('POST auth/register', () => {
       expect(isJwt(accessToken)).toBeTruthy();
       expect(isJwt(refreshToken)).toBeTruthy();
     });
-    // it('should store the refresh token in the database', async () => {
-    //   // Arrange
-    //   const userData = {
-    //     firstName: 'Rakesh',
-    //     lastName: 'K',
-    //     email: 'rakesh@mern.space',
-    //     password: 'password',
-    //   };
+    it('should store the refresh token in the database', async () => {
+      // Arrange
+      const userData = {
+        firstName: 'Sagar',
+        lastName: 'Sain',
+        email: 'test2@gmail.com',
+        password: 'Ss@12345',
+      };
 
-    //   // Act
-    //   const response = await request(app).post('/auth/register').send(userData);
+      //Act
+      const response = await request(app).post('/auth/resigter').send(userData);
 
-    //   // Assert
-    //   const refreshTokenRepo = connection.getRepository(RefreshToken);
-    //   // const refreshTokens = await refreshTokenRepo.find();
+      // Assert
+      const refreshTokenRepo = connection.getRepository(RefreshToken);
+      const refreshTokens = await refreshTokenRepo.find();
 
-    //   const tokens = await refreshTokenRepo
-    //     .createQueryBuilder('refreshToken')
-    //     .where('refreshToken.userId = :userId', {
-    //       userId: (response.body as Record<string, string>).id,
-    //     })
-    //     .getMany();
-
-    //   expect(tokens).toHaveLength(1);
-    // });
+      // const tokens = await refreshTokenRepo
+      //   .createQueryBuilder('refreshToken')
+      //   .where('refreshToken.userId = :userId', {
+      //     userId: (response.body as Record<string, string>).id,
+      //   })
+      //   .getMany();
+      expect(refreshTokens).toHaveLength(1);
+    });
   });
 
   describe('input should be in the correct formate', () => {

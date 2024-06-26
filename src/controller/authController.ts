@@ -8,6 +8,8 @@ import createHttpError from 'http-errors';
 import path from 'path';
 import fs from 'fs';
 import { Config } from '../config';
+import { AppDataSource } from '../config/data-source';
+import { RefreshToken } from '../entity/RefreshToken';
 
 export class AuthController {
   userService: UserService;
@@ -70,15 +72,24 @@ export class AuthController {
         issuer: 'auth-service',
       });
 
+      // Persist the refresh token
+      const MS_IN_YEAR = 1000 * 60 * 60 * 24 * 365; // 1Y -> (Leap year)
+      const refreshTokenRepository = AppDataSource.getRepository(RefreshToken);
+      const newRefreshToken = await refreshTokenRepository.save({
+        user: user,
+        expiresAt: new Date(Date.now() + MS_IN_YEAR),
+      });
+
       //Refresh token generation using HS256
 
       const refreshToken = sign(payload, Config.REFRESH_TOKEN_SECRET!, {
         algorithm: 'HS256',
         expiresIn: '1y',
         issuer: 'auth-service',
+        jwtid: String(newRefreshToken.id),
       });
 
-      //access token and refresh token
+      //access token and refresh token sending in cookies
       res.cookie('accessToken', accessToken, {
         domain: 'localhost',
         sameSite: 'strict',
