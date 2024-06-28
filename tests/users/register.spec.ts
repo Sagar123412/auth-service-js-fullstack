@@ -36,7 +36,7 @@ describe('POST auth/register', () => {
       };
 
       //Act
-      const result = await request(app).post('/auth/resigter').send(userData);
+      const result = await request(app).post('/auth/register').send(userData);
 
       //Assert
       expect(result.statusCode).toBe(201);
@@ -54,7 +54,7 @@ describe('POST auth/register', () => {
       };
 
       //Act
-      await request(app).post('/auth/resigter').send(userData);
+      await request(app).post('/auth/register').send(userData);
 
       //Assert
       const userRepository = await connection.getRepository(User);
@@ -72,7 +72,7 @@ describe('POST auth/register', () => {
       };
 
       //Act
-      await request(app).post('/auth/resigter').send(userData);
+      await request(app).post('/auth/register').send(userData);
 
       //Assert
       const userRepository = await connection.getRepository(User);
@@ -92,7 +92,7 @@ describe('POST auth/register', () => {
       };
 
       //Act
-      await request(app).post('/auth/resigter').send(userData);
+      await request(app).post('/auth/register').send(userData);
 
       //Assert
       const userRepository = await connection.getRepository(User);
@@ -116,7 +116,7 @@ describe('POST auth/register', () => {
       const userRepository = await connection.getRepository(User);
       userRepository.save({ ...userData, role: 'customer' });
 
-      await request(app).post('/auth/resigter').send(userData);
+      await request(app).post('/auth/register').send(userData);
 
       //Assert
       const user = await userRepository.find();
@@ -135,7 +135,7 @@ describe('POST auth/register', () => {
       };
 
       //Act
-      const response = await request(app).post('/auth/resigter').send(userData);
+      const response = await request(app).post('/auth/register').send(userData);
 
       //Assert
 
@@ -157,7 +157,7 @@ describe('POST auth/register', () => {
       };
 
       //Act
-      const response = await request(app).post('/auth/resigter').send(userData);
+      const response = await request(app).post('/auth/register').send(userData);
 
       interface Headers {
         ['set-cookie']: string[];
@@ -195,7 +195,7 @@ describe('POST auth/register', () => {
       };
 
       //Act
-      const response = await request(app).post('/auth/resigter').send(userData);
+      const response = await request(app).post('/auth/register').send(userData);
 
       // Assert
       const refreshTokenRepo = connection.getRepository(RefreshToken);
@@ -222,7 +222,7 @@ describe('POST auth/register', () => {
       };
 
       //Act
-      const response = await request(app).post('/auth/resigter').send(userData);
+      const response = await request(app).post('/auth/register').send(userData);
 
       //Assert
 
@@ -242,7 +242,7 @@ describe('POST auth/register', () => {
       };
 
       //Act
-      const response = await request(app).post('/auth/resigter').send(userData);
+      const response = await request(app).post('/auth/register').send(userData);
 
       expect(response.statusCode).toBe(400);
       //Assert
@@ -263,7 +263,7 @@ describe('POST auth/register', () => {
       };
 
       //Act
-      const response = await request(app).post('/auth/resigter').send(userData);
+      const response = await request(app).post('/auth/register').send(userData);
 
       expect(response.statusCode).toBe(400);
       //Assert
@@ -284,7 +284,7 @@ describe('POST auth/register', () => {
       };
 
       //Act
-      const response = await request(app).post('/auth/resigter').send(userData);
+      const response = await request(app).post('/auth/register').send(userData);
 
       expect(response.statusCode).toBe(400);
       //Assert
@@ -304,7 +304,7 @@ describe('POST auth/register', () => {
       };
 
       //Act
-      const response = await request(app).post('/auth/resigter').send(userData);
+      const response = await request(app).post('/auth/register').send(userData);
 
       expect(response.statusCode).toBe(400);
       //Assert

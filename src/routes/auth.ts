@@ -7,6 +7,8 @@ import { AppDataSource } from '../config/data-source';
 import registerValidators from '../validators/register-validators';
 import { TokenService } from '../services/TokenService';
 import { RefreshToken } from '../entity/RefreshToken';
+import loginValidators from '../validators/login-validators';
+import { CredentialService } from '../services/CredentialService';
 const router = express.Router();
 
 //authController instance
@@ -15,15 +17,29 @@ const userService = new UserService(userRepository);
 
 const refreshTokenRepository = AppDataSource.getRepository(RefreshToken);
 const tokenService = new TokenService(refreshTokenRepository);
+const credService = new CredentialService();
 
 // Instantiate AuthController with logger and userService
-const authController = new AuthController(userService, logger, tokenService);
+const authController = new AuthController(
+  userService,
+  logger,
+  tokenService,
+  credService,
+);
 
 router.post(
-  '/resigter',
+  '/register',
   registerValidators,
   async (req: Request, res: Response, next: NextFunction) => {
     await authController.register(req, res, next);
+  },
+);
+
+router.post(
+  '/login',
+  loginValidators,
+  async (req: Request, res: Response, next: NextFunction) => {
+    await authController.login(req, res, next);
   },
 );
 
