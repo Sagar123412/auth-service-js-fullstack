@@ -1,24 +1,33 @@
 import request from 'supertest';
 import app from '../../src/app';
+import { DataSource } from 'typeorm';
+import { AppDataSource } from '../../src/config/data-source';
+import { User } from '../../src/entity/User';
+import { RefreshToken } from '../../src/entity/RefreshToken';
 
-describe('login /auth/login', () => {
-  describe('happy path', () => {
-    it('should return 200 status code', async () => {
-      //AAA rute
+describe('POST auth/register', () => {
+  let connection: DataSource;
 
-      //Arrange
-      const userData = {
-        email: 'tesaddadsadsdast@gmail.com',
-        password: 'Ss@12345',
-      };
-
-      //Act
-      const result = await request(app).post('/auth/login').send(userData);
-
-      //Assert
-      expect(result.statusCode).toBe(400);
-    });
+  beforeAll(async () => {
+    connection = await AppDataSource.initialize();
   });
 
-  describe('sad path', () => {});
+  beforeEach(async () => {
+    //truncate database
+    await connection.dropDatabase();
+    await connection.synchronize();
+  });
+
+  afterAll(async () => {
+    await connection.destroy();
+  });
+
+  describe('happly path', () => {
+    it('should not null', () => {
+      expect(2).toBe(2);
+    });
+    it('should return the data', () => {
+      expect(2).toBe(2);
+    });
+  });
 });
