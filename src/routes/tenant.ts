@@ -6,14 +6,20 @@ import { Tenant } from '../entity/Tenant';
 import logger from '../config/logger';
 import { CreateTenantRequest } from '../types';
 import authenticate from '../middlewares/authenticate';
+import { canAccess } from '../middlewares/canAccess';
+import { roles } from '../constants';
 const router = express.Router();
 
 const tenantRepository = AppDataSource.getRepository(Tenant);
 const tenantSerive = new TenantService(tenantRepository);
 const tenantController = new TenantController(tenantSerive, logger);
 
-router.post('/', authenticate, (req: CreateTenantRequest, res, next) =>
-  tenantController.create(req, res, next),
+router.post(
+  '/',
+  authenticate,
+  canAccess([roles.ADMIN]),
+  (req: CreateTenantRequest, res, next) =>
+    tenantController.create(req, res, next),
 );
 
 export default router;
