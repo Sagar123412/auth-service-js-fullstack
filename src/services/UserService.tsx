@@ -30,7 +30,7 @@ export class UserService {
         lastName,
         email,
         password: hanshedPassword,
-        role
+        role,
       });
     } catch (error) {
       const err = createHttpError(
@@ -51,19 +51,12 @@ export class UserService {
 
   async findByEmailWithPassword(email: string) {
     return await this.userRepository.findOne({
-        where: {
-            email,
-        },
-        select: [
-            "id",
-            "firstName",
-            "lastName",
-            "email",
-            "role",
-            "password",
-        ],
+      where: {
+        email,
+      },
+      select: ['id', 'firstName', 'lastName', 'email', 'role', 'password'],
     });
-}
+  }
 
   async findById(id: number) {
     return await this.userRepository.findOne({
@@ -73,30 +66,27 @@ export class UserService {
     });
   }
 
-  async update(
-    userId: number,
-    { firstName, lastName, role }: LimitedUserData,
-) {
+  async update(userId: number, { firstName, lastName, role }: LimitedUserData) {
     try {
-        return await this.userRepository.update(userId, {
-            firstName,
-            lastName,
-            role,
-        });
+      return await this.userRepository.update(userId, {
+        firstName,
+        lastName,
+        role,
+      });
     } catch (err) {
-        const error = createHttpError(
-            500,
-            "Failed to update the user in the database",
-        );
-        throw error;
+      const error = createHttpError(
+        500,
+        'Failed to update the user in the database',
+      );
+      throw error;
     }
   }
 
-async getAll() {
+  async getAll() {
     return await this.userRepository.find();
-}
+  }
 
-async deleteById(userId: number) {
+  async deleteById(userId: number) {
     return await this.userRepository.delete(userId);
-}
+  }
 }
