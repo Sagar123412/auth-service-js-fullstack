@@ -5,6 +5,7 @@ import logger from './config/logger';
 import authRouter from './routes/auth';
 import cookieParser from 'cookie-parser';
 import tenanatRouter from './routes/tenant';
+import userRouter from './routes/user';
 
 const app = express();
 app.use(express.static('public'));
@@ -17,6 +18,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/auth/', authRouter);
 app.use('/tenants', tenanatRouter);
+app.use('/users', userRouter);
 
 //global error handler middleware
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

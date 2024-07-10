@@ -18,22 +18,23 @@ describe('POST auth/self', () => {
 
   beforeEach(async () => {
     //start jwt mock
+    await connection.dropDatabase();
+    await connection.synchronize();
+
     jwks.start();
     adminToken = jwks.token({
       sub: '1',
       role: roles.ADMIN,
     });
     //truncate database
-    await connection.dropDatabase();
-    await connection.synchronize();
-  });
-
-  afterEach(() => {
-    jwks.stop();
   });
 
   afterAll(async () => {
     await connection.destroy();
+  });
+
+  afterEach(() => {
+    jwks.stop();
   });
 
   describe('happy path', () => {
@@ -49,6 +50,7 @@ describe('POST auth/self', () => {
 
       expect(response.statusCode).toBe(201);
     });
+
     it('should create a tenant in the database', async () => {
       const tenantData = {
         name: 'Tenant name',
@@ -62,6 +64,7 @@ describe('POST auth/self', () => {
 
       const tenantRepository = connection.getRepository(Tenant);
       const tenants = await tenantRepository.find();
+
       expect(tenants).toHaveLength(1);
       expect(tenants[0].name).toBe(tenantData.name);
       expect(tenants[0].address).toBe(tenantData.address);

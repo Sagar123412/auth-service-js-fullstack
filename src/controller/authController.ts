@@ -7,6 +7,7 @@ import { JwtPayload } from 'jsonwebtoken';
 import { TokenService } from '../services/TokenService';
 import createHttpError from 'http-errors';
 import { CredentialService } from '../services/CredentialService';
+import { roles } from '../constants';
 
 export class AuthController {
   userService: UserService;
@@ -49,6 +50,7 @@ export class AuthController {
         lastName,
         email,
         password,
+        role: roles.CUSTOMER,
       });
       this.logger.info('User created successfully', user.id);
 
@@ -114,7 +116,7 @@ export class AuthController {
 
     try {
       //check if email exits in the database
-      const user = await this.userService.findByEmail(email);
+      const user = await this.userService.findByEmailWithPassword(email);
 
       if (!user) {
         const err = createHttpError(400, 'Email or password is not valid');
