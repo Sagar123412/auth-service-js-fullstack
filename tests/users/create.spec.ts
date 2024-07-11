@@ -6,6 +6,8 @@ import { AppDataSource } from '../../src/config/data-source';
 import app from '../../src/app';
 import { User } from '../../src/entity/User';
 import { roles } from '../../src/constants';
+import { createTenant } from '../utils';
+import { Tenant } from '../../src/entity/Tenant';
 
 describe('POST /users', () => {
   let connection: DataSource;
@@ -32,6 +34,8 @@ describe('POST /users', () => {
 
   describe('Given all fields', () => {
     it('should persist the user in the database', async () => {
+      const tenant = await createTenant(connection.getRepository(Tenant));
+
       const adminToken = jwks.token({
         sub: '1',
         role: roles.ADMIN,
@@ -44,7 +48,7 @@ describe('POST /users', () => {
         email: 'demo1@gmail.com',
         password: 'password',
         role: roles.ADMIN,
-        tenantId: 1,
+        tenantId: tenant.id,
       };
 
       // Add token to cookie
@@ -53,8 +57,6 @@ describe('POST /users', () => {
         .set('Cookie', [`accessToken=${adminToken}`])
         .send(userData);
 
-      console.log(result.body);
-      console.log(result.error);
       const userRepository = connection.getRepository(User);
       const users = await userRepository.find();
 
@@ -63,6 +65,8 @@ describe('POST /users', () => {
     });
 
     it('should create a manager user', async () => {
+      const tenant = await createTenant(connection.getRepository(Tenant));
+
       const adminToken = jwks.token({
         sub: '1',
         role: roles.ADMIN,
@@ -75,7 +79,7 @@ describe('POST /users', () => {
         email: 'rakesh@mern.space',
         password: 'password',
         role: roles.ADMIN,
-        tenantId: 1,
+        tenantId: tenant.id,
       };
 
       // Add token to cookie
