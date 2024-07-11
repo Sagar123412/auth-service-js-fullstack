@@ -30,13 +30,10 @@ export class UserService {
         lastName,
         email,
         password: hanshedPassword,
-        role
+        role,
       });
     } catch (error) {
-      const err = createHttpError(
-        500,
-        'failed to store user in the database',
-      );
+      const err = createHttpError(500, 'failed to store user in the database');
       throw err;
     }
   }
