@@ -174,7 +174,7 @@ export class AuthController {
         httpOnly: true, // Very important
       });
 
-      this.logger.info('user has been registered', { id: user.id });
+      this.logger.info('user has been loged in', { id: user.id });
 
       res.status(200).send({ message: 'User Has been login', id: user.id });
     } catch (error) {
