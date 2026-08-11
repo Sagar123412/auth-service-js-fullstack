@@ -27,10 +27,14 @@ app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
   const status = err.statusCode || err.status || 500;
 
   res.status(status).json({
-    type: err.name,
-    message: err.message,
-    path: '',
-    location: '',
+    error: [
+      {
+        type: err.name,
+        message: err.message,
+        path: '',
+        location: '',
+      },
+    ],
   });
 });
 
