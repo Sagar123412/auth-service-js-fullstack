@@ -1,9 +1,9 @@
-import createHttpError from 'http-errors';
-import { JwtPayload, sign } from 'jsonwebtoken';
-import { Config } from '../config';
-import { RefreshToken } from '../entity/RefreshToken';
-import { User } from '../entity/User';
-import { Repository } from 'typeorm';
+import createHttpError from "http-errors";
+import { JwtPayload, sign } from "jsonwebtoken";
+import { Config } from "../config";
+import { RefreshToken } from "../entity/RefreshToken";
+import { User } from "../entity/User";
+import { Repository } from "typeorm";
 
 export class TokenService {
   refreshTokenRepository: Repository<RefreshToken>;
@@ -16,19 +16,18 @@ export class TokenService {
     //private key for RS256
     let privateKey: string;
 
-
     try {
       privateKey = Config.PRIVATE_KEY!;
     } catch (err) {
-      const error = createHttpError(500, 'Error while reading private key');
+      const error = createHttpError(500, "Error while reading private key");
       throw error;
       return;
     }
 
     const accessToken = sign(payload, privateKey, {
-      algorithm: 'RS256',
-      expiresIn: '1h',
-      issuer: 'auth-service',
+      algorithm: "RS256",
+      expiresIn: "1h",
+      issuer: "auth-service",
     });
 
     return accessToken;
@@ -36,9 +35,9 @@ export class TokenService {
 
   generateRefreshToken(payload: JwtPayload) {
     const refreshToken = sign(payload, Config.REFRESH_TOKEN_SECRET!, {
-      algorithm: 'HS256',
-      expiresIn: '1y',
-      issuer: 'auth-service',
+      algorithm: "HS256",
+      expiresIn: "1y",
+      issuer: "auth-service",
       jwtid: String(payload.id),
     });
     return refreshToken;

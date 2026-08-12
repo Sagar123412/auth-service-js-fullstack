@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class AddTenantIdForeignKey1720520316329 implements MigrationInterface {
-  name = 'AddTenantIdForeignKey1720520316329';
+  name = "AddTenantIdForeignKey1720520316329";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "users" ADD "tenantId" integer`);

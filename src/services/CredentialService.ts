@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 
 export class CredentialService {
   async comparePassword(password: string, hashPassword: string) {

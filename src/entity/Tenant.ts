@@ -4,17 +4,17 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from 'typeorm';
+} from "typeorm";
 
-@Entity({ name: 'tenants' })
+@Entity({ name: "tenants" })
 export class Tenant {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar', { length: 100 })
+  @Column("varchar", { length: 100 })
   name: string;
 
-  @Column('varchar', { length: 255 })
+  @Column("varchar", { length: 255 })
   address: string;
 
   @UpdateDateColumn()

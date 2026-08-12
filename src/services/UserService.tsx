@@ -6,7 +6,10 @@ import createHttpError from "http-errors";
 import { Logger } from "winston";
 
 export class UserService {
-  constructor(private userRepository: Repository<User>, private logger: Logger) { }
+  constructor(
+    private userRepository: Repository<User>,
+    private logger: Logger,
+  ) {}
 
   async create({
     firstName,
@@ -16,7 +19,6 @@ export class UserService {
     role,
     tenantId,
   }: UserData) {
-
     const user = await this.userRepository.findOne({
       where: { email: email },
     });
@@ -29,7 +31,6 @@ export class UserService {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     try {
-
       return await this.userRepository.save({
         firstName,
         lastName,
@@ -52,14 +53,7 @@ export class UserService {
       where: {
         email,
       },
-      select: [
-        "id",
-        "firstName",
-        "lastName",
-        "email",
-        "role",
-        "password",
-      ],
+      select: ["id", "firstName", "lastName", "email", "role", "password"],
       relations: {
         tenant: true,
       },
@@ -81,10 +75,7 @@ export class UserService {
     userId: number,
     { firstName, lastName, role, email, tenantId }: LimitedUserData,
   ) {
-
-
     try {
-
       return await this.userRepository.update(userId, {
         firstName,
         lastName,
@@ -92,7 +83,6 @@ export class UserService {
         email,
         tenant: tenantId ? { id: tenantId } : null,
       });
-
     } catch (err) {
       const error = createHttpError(
         500,
@@ -109,10 +99,9 @@ export class UserService {
       const searchTerm = `%${validatedQuery.q}%`;
       queryBuilder.where(
         new Brackets((qb) => {
-          qb.where(
-            "CONCAT(user.firstName, ' ', user.lastName) ILike :q",
-            { q: searchTerm },
-          ).orWhere("user.email ILike :q", { q: searchTerm });
+          qb.where("CONCAT(user.firstName, ' ', user.lastName) ILike :q", {
+            q: searchTerm,
+          }).orWhere("user.email ILike :q", { q: searchTerm });
         }),
       );
     }

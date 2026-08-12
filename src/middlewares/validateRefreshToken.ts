@@ -1,15 +1,15 @@
-import { expressjwt } from 'express-jwt';
-import { Config } from '../config';
-import { Request } from 'express';
-import { AuthCookie, IRefreshTokenPayload } from '../types';
-import { AppDataSource } from '../config/data-source';
-import { RefreshToken } from '../entity/RefreshToken';
-import logger from '../config/logger';
+import { expressjwt } from "express-jwt";
+import { Config } from "../config";
+import { Request } from "express";
+import { AuthCookie, IRefreshTokenPayload } from "../types";
+import { AppDataSource } from "../config/data-source";
+import { RefreshToken } from "../entity/RefreshToken";
+import logger from "../config/logger";
 
 // we are using HS256 algorithm for refresh token
 export default expressjwt({
   secret: Config.REFRESH_TOKEN_SECRET!,
-  algorithms: ['HS256'],
+  algorithms: ["HS256"],
   getToken(req: Request) {
     const { refreshToken } = req.cookies as AuthCookie;
     return refreshToken;
@@ -25,7 +25,7 @@ export default expressjwt({
       });
       return refreshToken === null;
     } catch (err) {
-      logger.error('Error while getting the refresh token', {
+      logger.error("Error while getting the refresh token", {
         id: (token?.payload as IRefreshTokenPayload).id,
       });
     }

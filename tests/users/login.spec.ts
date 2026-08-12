@@ -1,13 +1,13 @@
-import { DataSource } from 'typeorm';
-import bcrypt from 'bcryptjs';
-import request from 'supertest';
-import { AppDataSource } from '../../src/config/data-source';
-import app from '../../src/app';
-import { isJwt } from '../utils';
-import { User } from '../../src/entity/User';
-import { roles } from '../../src/constants';
+import { DataSource } from "typeorm";
+import bcrypt from "bcryptjs";
+import request from "supertest";
+import { AppDataSource } from "../../src/config/data-source";
+import app from "../../src/app";
+import { isJwt } from "../utils";
+import { User } from "../../src/entity/User";
+import { roles } from "../../src/constants";
 
-describe('POST /auth/login', () => {
+describe("POST /auth/login", () => {
   let connection: DataSource;
 
   beforeAll(async () => {
@@ -23,14 +23,14 @@ describe('POST /auth/login', () => {
     await connection.destroy();
   });
 
-  describe('Given all fields', () => {
-    it('should return the access token and refresh token inside a cookie', async () => {
+  describe("Given all fields", () => {
+    it("should return the access token and refresh token inside a cookie", async () => {
       // Arrange
       const userData = {
-        firstName: 'Rakesh',
-        lastName: 'K',
-        email: 'rakesh@mern.space',
-        password: '@Demo12password',
+        firstName: "Rakesh",
+        lastName: "K",
+        email: "rakesh@mern.space",
+        password: "@Demo12password",
       };
 
       const hashedPassword = await bcrypt.hash(userData.password, 10);
@@ -44,23 +44,23 @@ describe('POST /auth/login', () => {
 
       // Act
       const response = await request(app)
-        .post('/auth/login')
+        .post("/auth/login")
         .send({ email: userData.email, password: userData.password });
 
       interface Headers {
-        ['set-cookie']?: string[];
+        ["set-cookie"]?: string[];
       }
       // Assert
       let accessToken = null;
       let refreshToken = null;
-      const cookies = (response.headers as Headers)['set-cookie'] || [];
+      const cookies = (response.headers as Headers)["set-cookie"] || [];
       cookies.forEach((cookie) => {
-        if (cookie.startsWith('accessToken=')) {
-          accessToken = cookie.split(';')[0].split('=')[1];
+        if (cookie.startsWith("accessToken=")) {
+          accessToken = cookie.split(";")[0].split("=")[1];
         }
 
-        if (cookie.startsWith('refreshToken=')) {
-          refreshToken = cookie.split(';')[0].split('=')[1];
+        if (cookie.startsWith("refreshToken=")) {
+          refreshToken = cookie.split(";")[0].split("=")[1];
         }
       });
       expect(accessToken).not.toBeNull();
@@ -69,13 +69,13 @@ describe('POST /auth/login', () => {
       expect(isJwt(accessToken)).toBeTruthy();
       expect(isJwt(refreshToken)).toBeTruthy();
     });
-    it('should return the 400 if email or password is wrong', async () => {
+    it("should return the 400 if email or password is wrong", async () => {
       // Arrange
       const userData = {
-        firstName: 'Rakesh',
-        lastName: 'K',
-        email: 'rakesh@mern.space',
-        password: 'password',
+        firstName: "Rakesh",
+        lastName: "K",
+        email: "rakesh@mern.space",
+        password: "password",
       };
 
       const hashedPassword = await bcrypt.hash(userData.password, 10);
@@ -89,8 +89,8 @@ describe('POST /auth/login', () => {
 
       // Act
       const response = await request(app)
-        .post('/auth/login')
-        .send({ email: userData.email, password: 'wrongPassword' });
+        .post("/auth/login")
+        .send({ email: userData.email, password: "wrongPassword" });
 
       // Assert
 
