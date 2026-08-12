@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import { Request } from "express";
 
 export interface UserData {
   firstName: string;
@@ -6,9 +6,9 @@ export interface UserData {
   email: string;
   password: string;
   role: string;
+  tenantId?: number;
 }
-
-export interface userRequestType extends Request {
+export interface RegisterUserRequest extends Request {
   body: UserData;
 }
 
@@ -17,6 +17,10 @@ export interface AuthRequest extends Request {
     sub: string;
     role: string;
     id?: string;
+    tenant: string;
+    firstName: string;
+    lastName: string;
+    email: string;
   };
 }
 
@@ -46,8 +50,23 @@ export interface LimitedUserData {
   firstName: string;
   lastName: string;
   role: string;
+  email: string;
+  tenantId: number;
 }
 
 export interface UpdateUserRequest extends Request {
   body: LimitedUserData;
+}
+
+export interface UserQueryParams {
+  perPage: number;
+  currentPage: number;
+  q: string;
+  role: string;
+}
+
+export interface TenantQueryParams {
+  q: string;
+  perPage: number;
+  currentPage: number;
 }

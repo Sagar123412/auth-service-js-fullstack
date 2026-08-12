@@ -1,8 +1,8 @@
-import { config } from 'dotenv';
-import path from 'path';
+import { config } from "dotenv";
+import path from "path";
 
 config({
-  path: path.join(__dirname, `../../.env.${process.env.NODE_ENV || 'dev'}`),
+  path: path.join(__dirname, `../../.env.${process.env.NODE_ENV || "dev"}`),
 });
 
 const {
@@ -15,6 +15,7 @@ const {
   DB_USERNAME,
   REFRESH_TOKEN_SECRET,
   JWKS_URI,
+  PRIVATE_KEY,
 } = process.env;
 
 export const Config = {
@@ -27,4 +28,5 @@ export const Config = {
   DB_USERNAME,
   REFRESH_TOKEN_SECRET,
   JWKS_URI,
+  PRIVATE_KEY,
 };

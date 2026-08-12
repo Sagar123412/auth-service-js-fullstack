@@ -1,13 +1,13 @@
-import { NextFunction, Request, Response } from 'express';
-import { TenantService } from '../services/TenantService';
-import { Logger } from 'winston';
-import { CreateTenantRequest } from '../types';
-import createHttpError from 'http-errors';
-import { validationResult } from 'express-validator';
+import { NextFunction, Request, Response } from "express";
+import { TenantService } from "../services/TenantService";
+import { CreateTenantRequest, TenantQueryParams } from "../types";
+import { Logger } from "winston";
+import createHttpError from "http-errors";
+import { matchedData, validationResult } from "express-validator";
 
 export class TenantController {
   constructor(
-    private tenantSerive: TenantService,
+    private tenantService: TenantService,
     private logger: Logger,
   ) {}
 
@@ -19,11 +19,11 @@ export class TenantController {
     }
 
     const { name, address } = req.body;
-    this.logger.debug('Request for creating a tenant', req.body);
+    this.logger.debug("Request for creating a tenant", req.body);
 
     try {
-      const tenant = await this.tenantSerive.create({ name, address });
-      this.logger.info('Tenant has been created', { id: tenant.id });
+      const tenant = await this.tenantService.create({ name, address });
+      this.logger.info("Tenant has been created", { id: tenant.id });
 
       res.status(201).json({ id: tenant.id });
     } catch (err) {
@@ -42,19 +42,19 @@ export class TenantController {
     const tenantId = req.params.id;
 
     if (isNaN(Number(tenantId))) {
-      next(createHttpError(400, 'Invalid url param.'));
+      next(createHttpError(400, "Invalid url param."));
       return;
     }
 
-    this.logger.debug('Request for updating a tenant', req.body);
+    this.logger.debug("Request for updating a tenant", req.body);
 
     try {
-      await this.tenantSerive.update(Number(tenantId), {
+      await this.tenantService.update(Number(tenantId), {
         name,
         address,
       });
 
-      this.logger.info('Tenant has been updated', { id: tenantId });
+      this.logger.info("Tenant has been updated", { id: tenantId });
 
       res.json({ id: Number(tenantId) });
     } catch (err) {
@@ -63,10 +63,20 @@ export class TenantController {
   }
 
   async getAll(req: Request, res: Response, next: NextFunction) {
+    const validatedQuery = matchedData(req, { onlyValidData: true });
     try {
-      const tenants = await this.tenantSerive.getAll();
+      const [tenants, count] = await this.tenantService.getAll(
+        validatedQuery as TenantQueryParams,
+      );
 
-      this.logger.info('All tenant have been fetched');
+      this.logger.info("All tenant have been fetched");
+      res.json({
+        currentPage: validatedQuery.currentPage as number,
+        perPage: validatedQuery.perPage as number,
+        total: count,
+        data: tenants,
+      });
+
       res.json(tenants);
     } catch (err) {
       next(err);
@@ -77,19 +87,19 @@ export class TenantController {
     const tenantId = req.params.id;
 
     if (isNaN(Number(tenantId))) {
-      next(createHttpError(400, 'Invalid url param.'));
+      next(createHttpError(400, "Invalid url param."));
       return;
     }
 
     try {
-      const tenant = await this.tenantSerive.getById(Number(tenantId));
+      const tenant = await this.tenantService.getById(Number(tenantId));
 
       if (!tenant) {
-        next(createHttpError(400, 'Tenant does not exist.'));
+        next(createHttpError(400, "Tenant does not exist."));
         return;
       }
 
-      this.logger.info('Tenant has been fetched');
+      this.logger.info("Tenant has been fetched");
       res.json(tenant);
     } catch (err) {
       next(err);
@@ -100,19 +110,21 @@ export class TenantController {
     const tenantId = req.params.id;
 
     if (isNaN(Number(tenantId))) {
-      next(createHttpError(400, 'Invalid url param.'));
+      next(createHttpError(400, "Invalid url param."));
       return;
     }
 
     try {
-      await this.tenantSerive.deleteById(Number(tenantId));
+      await this.tenantService.deleteById(Number(tenantId));
 
-      this.logger.info('Tenant has been deleted', {
+      this.logger.info("Tenant has been deleted", {
         id: Number(tenantId),
       });
+
       res.json({ id: Number(tenantId) });
     } catch (err) {
       next(err);
+      return;
     }
   }
 }

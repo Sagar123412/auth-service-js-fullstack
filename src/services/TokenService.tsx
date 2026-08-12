@@ -1,7 +1,5 @@
-import fs from 'fs';
 import createHttpError from 'http-errors';
 import { JwtPayload, sign } from 'jsonwebtoken';
-import path from 'path';
 import { Config } from '../config';
 import { RefreshToken } from '../entity/RefreshToken';
 import { User } from '../entity/User';
@@ -16,11 +14,11 @@ export class TokenService {
 
   generateAccessToken(payload: JwtPayload) {
     //private key for RS256
-    let privateKey: Buffer;
+    let privateKey: string;
+
+
     try {
-      privateKey = fs.readFileSync(
-        path.join(__dirname, '../../certs/private.pem'),
-      );
+      privateKey = Config.PRIVATE_KEY!;
     } catch (err) {
       const error = createHttpError(500, 'Error while reading private key');
       throw error;

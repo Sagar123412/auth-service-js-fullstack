@@ -1,13 +1,13 @@
-import { NextFunction, Response } from 'express';
-import { AuthRequest, userRequestType } from '../types';
-import { UserService } from '../services/UserService';
-import { Logger } from 'winston';
-import { validationResult } from 'express-validator';
-import { JwtPayload } from 'jsonwebtoken';
-import { TokenService } from '../services/TokenService';
-import createHttpError from 'http-errors';
-import { CredentialService } from '../services/CredentialService';
-import { roles } from '../constants';
+import { NextFunction, Response } from "express";
+import { AuthRequest, RegisterUserRequest } from "../types";
+import { UserService } from "../services/UserService";
+import { Logger } from "winston";
+import { validationResult } from "express-validator";
+import { JwtPayload } from "jsonwebtoken";
+import { TokenService } from "../services/TokenService";
+import createHttpError from "http-errors";
+import { CredentialService } from "../services/CredentialService";
+import { roles } from "../constants";
 
 export class AuthController {
   userService: UserService;
@@ -27,7 +27,7 @@ export class AuthController {
     this.credentialService = credentialService;
   }
 
-  async register(req: userRequestType, res: Response, next: NextFunction) {
+  async register(req: RegisterUserRequest, res: Response, next: NextFunction) {
     //validation
     const result = validationResult(req);
 
@@ -37,11 +37,11 @@ export class AuthController {
 
     const { firstName, lastName, email, password } = req.body;
 
-    this.logger.debug('new request to register a user', {
+    this.logger.debug("new request to register a user", {
       firstName,
       lastName,
       email,
-      password: '********',
+      password: "********",
     });
 
     try {
@@ -52,7 +52,7 @@ export class AuthController {
         password,
         role: roles.CUSTOMER,
       });
-      this.logger.info('User created successfully', user.id);
+      this.logger.info("User created successfully", user.id);
 
       //generated access token using JWT RS256 encoding method
 
@@ -75,31 +75,31 @@ export class AuthController {
       });
 
       //access token and refresh token sending in cookies
-      res.cookie('accessToken', accessToken, {
-        domain: 'localhost',
-        sameSite: 'strict',
+      res.cookie("accessToken", accessToken, {
+        domain: "localhost",
+        sameSite: "strict",
         maxAge: 1000 * 60 * 60 * 24 * 1, // 1d
         httpOnly: true, // Very important
       });
 
-      res.cookie('refreshToken', refreshToken, {
-        domain: 'localhost',
-        sameSite: 'strict',
+      res.cookie("refreshToken", refreshToken, {
+        domain: "localhost",
+        sameSite: "strict",
         maxAge: 1000 * 60 * 60 * 24 * 365, // 1y
         httpOnly: true, // Very important
       });
 
       res
         .status(201)
-        .send({ message: 'User created successfully', UserId: user.id });
+        .send({ message: "User created successfully", UserId: user.id });
     } catch (error) {
-      this.logger.error('Error creating user', error);
+      this.logger.error("Error creating user", error);
       next(error);
       return;
     }
   }
 
-  async login(req: userRequestType, res: Response, next: NextFunction) {
+  async login(req: RegisterUserRequest, res: Response, next: NextFunction) {
     //validation
     const result = validationResult(req);
 
@@ -109,9 +109,9 @@ export class AuthController {
 
     const { email, password } = req.body;
 
-    this.logger.debug('new request to login a user', {
+    this.logger.debug("new request to login a user", {
       email,
-      password: '********',
+      password: "********",
     });
 
     try {
@@ -119,7 +119,7 @@ export class AuthController {
       const user = await this.userService.findByEmailWithPassword(email);
 
       if (!user) {
-        const err = createHttpError(400, 'Email or password is not valid');
+        const err = createHttpError(400, "Email or password is not valid");
         next(err);
         return;
       }
@@ -132,7 +132,7 @@ export class AuthController {
       );
 
       if (!passwordMatch) {
-        const err = createHttpError(400, 'Email or password is not valid');
+        const err = createHttpError(400, "Email or password is not valid");
         next(err);
         return;
       }
@@ -160,25 +160,25 @@ export class AuthController {
       });
 
       //access token and refresh token sending in cookies
-      res.cookie('accessToken', accessToken, {
-        domain: 'localhost',
-        sameSite: 'strict',
+      res.cookie("accessToken", accessToken, {
+        domain: "localhost",
+        sameSite: "strict",
         maxAge: 1000 * 60 * 60 * 24 * 1, // 1d
         httpOnly: true, // Very important
       });
 
-      res.cookie('refreshToken', refreshToken, {
-        domain: 'localhost',
-        sameSite: 'strict',
+      res.cookie("refreshToken", refreshToken, {
+        domain: "localhost",
+        sameSite: "strict",
         maxAge: 1000 * 60 * 60 * 24 * 365, // 1y
         httpOnly: true, // Very important
       });
 
-      this.logger.info('user has been loged in', { id: user.id });
+      this.logger.info("user has been loged in", { id: user.id });
 
-      res.status(200).send({ message: 'User Has been login', id: user.id });
+      res.status(200).send({ message: "User Has been login", id: user.id });
     } catch (error) {
-      this.logger.error('Error creating user', error);
+      this.logger.error("Error creating user", error);
       next(error);
       return;
     }
@@ -204,7 +204,7 @@ export class AuthController {
       if (!user) {
         const error = createHttpError(
           400,
-          'User with the token could not find',
+          "User with the token could not find",
         );
         next(error);
         return;
@@ -221,21 +221,21 @@ export class AuthController {
         id: String(newRefreshToken.id),
       });
 
-      res.cookie('accessToken', accessToken, {
-        domain: 'localhost',
-        sameSite: 'strict',
+      res.cookie("accessToken", accessToken, {
+        domain: "localhost",
+        sameSite: "strict",
         maxAge: 1000 * 60 * 60, // 1h
         httpOnly: true, // Very important
       });
 
-      res.cookie('refreshToken', refreshToken, {
-        domain: 'localhost',
-        sameSite: 'strict',
+      res.cookie("refreshToken", refreshToken, {
+        domain: "localhost",
+        sameSite: "strict",
         maxAge: 1000 * 60 * 60 * 24 * 365, // 1y
         httpOnly: true, // Very important
       });
 
-      this.logger.info('User has been logged in', { id: user.id });
+      this.logger.info("User has been logged in", { id: user.id });
       res.json({ id: user.id });
     } catch (err) {
       next(err);
@@ -246,15 +246,15 @@ export class AuthController {
   async logout(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       await this.tokenService.deleteRefreshToken(Number(req.auth.id));
-      this.logger.info('Refresh token has been deleted', {
+      this.logger.info("Refresh token has been deleted", {
         id: req.auth.id,
       });
 
-      this.logger.info('User has been logged out', { id: req.auth.sub });
+      this.logger.info("User has been logged out", { id: req.auth.sub });
 
       //clearing cookies after logging out the user
-      res.clearCookie('accessToken');
-      res.clearCookie('refreshToken');
+      res.clearCookie("accessToken");
+      res.clearCookie("refreshToken");
 
       res.json({});
     } catch (err) {
