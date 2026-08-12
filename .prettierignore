@@ -18,6 +18,9 @@ out/
 .prettiercache
 .turbo/
 
+tsconfig.json
+package.json
+
 # Coverage and Test Reports
 coverage/
 *.lcov
