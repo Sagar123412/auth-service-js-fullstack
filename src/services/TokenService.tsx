@@ -16,6 +16,12 @@ export class TokenService {
     //private key for RS256
     let privateKey: string;
 
+    if (!Config.PRIVATE_KEY) {
+      const error = createHttpError(500, "Private is not found");
+      throw error;
+      return;
+    }
+
     try {
       privateKey = Config.PRIVATE_KEY!;
     } catch (err) {
