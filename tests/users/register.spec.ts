@@ -82,17 +82,18 @@ describe("POST /auth/register", () => {
       const userData = {
         firstName: "Rakesh",
         lastName: "K",
-        email: "rakesh@mern.space",
+        email: "radskesh@mern.space",
         password: "@#Sp2assword",
       };
       // Act
       const response = await request(app).post("/auth/register").send(userData);
 
       // Assert
-      expect(response.body).toHaveProperty("id");
       const repository = connection.getRepository(User);
       const users = await repository.find();
-      expect((response.body as Record<string, string>).id).toBe(users[0].id);
+      expect((response.body as Record<string, string>).UserId).toBe(
+        users[0].id,
+      );
     });
 
     it("should assign a customer role", async () => {
@@ -192,7 +193,7 @@ describe("POST /auth/register", () => {
       const userData = {
         firstName: "Rakesh",
         lastName: "K",
-        email: "rakesh@mern.space",
+        email: "rakehjfjfsh@mern.space",
         password: "@S1password",
       };
 
@@ -206,7 +207,7 @@ describe("POST /auth/register", () => {
       const tokens = await refreshTokenRepo
         .createQueryBuilder("refreshToken")
         .where("refreshToken.userId = :userId", {
-          userId: (response.body as Record<string, string>).id,
+          userId: (response.body as Record<string, string>).UserId,
         })
         .getMany();
 

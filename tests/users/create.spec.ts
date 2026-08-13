@@ -80,8 +80,8 @@ describe("POST /users", () => {
       const userData = {
         firstName: "Rakesh",
         lastName: "K",
-        email: "rakesh@mern.space",
-        password: "password",
+        email: "rakedsfsdssh@mern.space",
+        password: "@S2password",
         tenantId: tenant.id,
         role: roles.MANAGER,
       };
