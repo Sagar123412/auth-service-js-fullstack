@@ -7,6 +7,10 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
+#certs folder that hold public and private keys
+certs/
+public/
+
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
@@ -78,6 +82,9 @@ web_modules/
 .env.test.local
 .env.production.local
 .env.local
+.env.test
+.env.dev
+.env.prod
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
