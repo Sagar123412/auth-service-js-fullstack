@@ -17,6 +17,8 @@ const {
   JWKS_URI,
   PRIVATE_KEY,
   DB_SSL,
+  ADMIN_EMAIL,
+  ADMIN_PASSWORD,
 } = process.env;
 
 export const Config = {
@@ -31,4 +33,6 @@ export const Config = {
   JWKS_URI,
   PRIVATE_KEY,
   DB_SSL,
+  ADMIN_EMAIL,
+  ADMIN_PASSWORD,
 };

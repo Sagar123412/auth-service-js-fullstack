@@ -14,9 +14,11 @@
     "test": "jest --no-cache --coverage --all --runInBand",
     "test:watch": "jest --no-cache --coverage --all --watch --runInBand",
     "start": "ts-node src/index.ts",
-    "migration:generate": "typeorm-ts-node-commonjs migration:generate",
-    "migration:run": "typeorm-ts-node-commonjs migration:run",
-    "migration:create": "typeorm-ts-node-commonjs migration:create"
+    "migration:generate": "typeorm-ts-node-commonjs migration:generate -d src/config/data-source.ts",
+    "migration:run": "typeorm-ts-node-commonjs migration:run -d src/config/data-source.ts",
+    "migration:run:fake": "typeorm-ts-node-commonjs migration:run -d src/config/data-source.ts -f",
+    "migration:create": "typeorm-ts-node-commonjs migration:create -d src/config/data-source.ts",
+    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/config/data-source.ts"
   },
   "author": "Sagar",
   "license": "ISC",
