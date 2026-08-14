@@ -43,14 +43,14 @@ jobs:
         needs: build-and-test
         runs-on: ubuntu-latest
         env:
-            IMAGE_NAME: mernpg/mernstack_auth_service # codersgyan/mernstack_auth_service:build-2
+            IMAGE_NAME: sag5840/mernstack_auth_service # codersgyan/mernstack_auth_service:build-2
             IMAGE_TAG: build-${{ github.run_number }}
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
             - name: Log in to Docker Hub
-              uses: docker/login-action@v1
+              uses: docker/login-action@v3
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_PASSWORD }}
