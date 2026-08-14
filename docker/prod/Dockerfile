@@ -18,7 +18,7 @@ RUN npm run build
 # till now we have build our builder image 
 
 
-FROM node:18-alpine as production
+FROM node:22-alpine as production
 
 ENV NODE_ENV=production
 

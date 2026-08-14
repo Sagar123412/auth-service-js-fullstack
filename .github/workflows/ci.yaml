@@ -26,6 +26,7 @@ jobs:
                   DB_USERNAME: ${{ secrets.TEST_DB_USERNAME }}
                   DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
                   DB_NAME: ${{ secrets.TEST_DB_NAME }}
+                  DB_SSL: 'true' # 👈 Add this line to force SSL connection
                   REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
                   JWKS_URI: ${{ secrets.JWKS_URI }}
                   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
