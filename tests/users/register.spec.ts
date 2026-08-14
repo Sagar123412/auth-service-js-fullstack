@@ -30,7 +30,7 @@ describe("POST /auth/register", () => {
       const userData = {
         firstName: "Rakesh",
         lastName: "K",
-        email: "rakesh@mern.space",
+        email: "rakesuflsiejh@mern.space",
         password: "@S3password",
       };
       // Act
@@ -82,7 +82,7 @@ describe("POST /auth/register", () => {
       const userData = {
         firstName: "Rakesh",
         lastName: "K",
-        email: "radskesh@mern.space",
+        email: "radsrdgdkesh@mern.space",
         password: "@#Sp2assword",
       };
       // Act
@@ -101,7 +101,7 @@ describe("POST /auth/register", () => {
       const userData = {
         firstName: "Rakesh",
         lastName: "K",
-        email: "rakesh@mern.space",
+        email: "rakwertyesh@mern.space",
         password: "@W2password",
       };
       // Act
@@ -119,7 +119,7 @@ describe("POST /auth/register", () => {
       const userData = {
         firstName: "Rakesh",
         lastName: "K",
-        email: "rakesh@mern.space",
+        email: "rakesedrfsh@mern.space",
         password: "@S1password",
       };
       // Act
