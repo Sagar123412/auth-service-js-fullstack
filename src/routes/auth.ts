@@ -1,4 +1,9 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, {
+  NextFunction,
+  Request,
+  RequestHandler,
+  Response,
+} from "express";
 import { AuthController } from "../controller/authController";
 import logger from "../config/logger";
 import { UserService } from "../services/UserService";
@@ -42,9 +47,8 @@ router.post(
 router.post(
   "/login",
   loginValidators,
-  async (req: Request, res: Response, next: NextFunction) => {
-    await authController.login(req, res, next);
-  },
+  (req: Request, res: Response, next: NextFunction) =>
+    authController.login(req, res, next) as unknown as RequestHandler,
 );
 
 router.get("/self", authenticate, (req: Request, res: Response) =>

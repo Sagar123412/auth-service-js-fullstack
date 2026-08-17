@@ -9,7 +9,7 @@ export class UserService {
   constructor(
     private userRepository: Repository<User>,
     private logger: Logger,
-  ) {}
+  ) { }
 
   async create({
     firstName,
@@ -49,6 +49,7 @@ export class UserService {
   }
 
   async findByEmailWithPassword(email: string) {
+
     return await this.userRepository.findOne({
       where: {
         email,
