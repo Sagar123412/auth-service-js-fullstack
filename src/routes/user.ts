@@ -1,4 +1,9 @@
-import express, { NextFunction, Response } from "express";
+import express, {
+  NextFunction,
+  Request,
+  RequestHandler,
+  Response,
+} from "express";
 import authenticate from "../middlewares/authenticate";
 import { canAccess } from "../middlewares/canAccess";
 import { roles } from "../constants";
@@ -10,6 +15,7 @@ import logger from "../config/logger";
 import createUserValidator from "../validators/create-user-validator";
 import { CreateUserRequest, UpdateUserRequest } from "../types";
 import updateUserValidator from "../validators/update-user-validator";
+import listUsersValidator from "../validators/list-users-validator";
 
 const router = express.Router();
 
@@ -35,8 +41,13 @@ router.patch(
     userController.update(req, res, next),
 );
 
-router.get("/", authenticate, canAccess([roles.ADMIN]), (req, res, next) =>
-  userController.getAll(req, res, next),
+router.get(
+  "/",
+  authenticate as RequestHandler,
+  canAccess([roles.ADMIN]),
+  listUsersValidator,
+  (req: Request, res: Response, next: NextFunction) =>
+    userController.getAll(req, res, next) as unknown as RequestHandler,
 );
 
 router.get("/:id", authenticate, canAccess([roles.ADMIN]), (req, res, next) =>

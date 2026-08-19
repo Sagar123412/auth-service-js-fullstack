@@ -70,6 +70,7 @@ export class TenantController {
       );
 
       this.logger.info("All tenant have been fetched");
+
       res.json({
         currentPage: validatedQuery.currentPage as number,
         perPage: validatedQuery.perPage as number,
@@ -77,7 +78,7 @@ export class TenantController {
         data: tenants,
       });
 
-      res.json(tenants);
+      // res.json(tenants);
     } catch (err) {
       next(err);
     }
