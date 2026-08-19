@@ -32,7 +32,8 @@ export class AuthController {
     const result = validationResult(req);
 
     if (!result.isEmpty()) {
-      return res.status(400).json({ errors: result.array() });
+      const err = createHttpError(400, result.array()[0].msg as string);
+      return next(err);
     }
 
     const { firstName, lastName, email, password } = req.body;
@@ -104,7 +105,8 @@ export class AuthController {
     const result = validationResult(req);
 
     if (!result.isEmpty()) {
-      return res.status(400).json({ errors: result.array() });
+      const err = createHttpError(400, result.array()[0].msg as string);
+      return next(err);
     }
 
     const { email, password } = req.body;
